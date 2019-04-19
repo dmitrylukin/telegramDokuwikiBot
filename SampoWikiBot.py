@@ -10,13 +10,16 @@ import re
 
 import pycurl
 import StringIO
+from pymorphy import get_morph
+morph = get_morph('/var/lib/pymorphy')
+
 
 
 SIGNIFICANTWORDS = 4
 
 SREF='https://sampowiki.club/doku.php?do=search&id=start&sf=1&q='
 
-STOPLIST = [u'сампо', u'соседи', u"привет", u"знает", u"подскажите", u"здравствуйте", u"делают", u"делает", u"какие", u"есть", u"здесь", u'какой', u'куда', u'какому', u'сейчас']
+STOPLIST = [u'сампо', u'какого', u'соседи', u"привет", u"знает", u"подскажите", u"здравствуйте", u"делают", u"делает", u"какие", u"есть", u"здесь", u'какой', u'куда', u'какому', u'сейчас']
 
 def xmlmethod(mtype, mstring):
     if (mtype == 'search'): 
@@ -34,6 +37,16 @@ def xmlmethod(mtype, mstring):
     r = response.getvalue()
     response.close()
     return r
+
+def getbase(w):
+    nword = w.decode('utf-8').upper()
+    nwordyset = morph.normalize(nword)
+
+    nwordy = nwordyset.pop()
+    searchy = nwordy.lower()
+    w = searchy.encode('utf-8')
+    return w
+
 
 def getwiki(search):
     
@@ -67,11 +80,12 @@ def hMessage(bot, update):
         if counter > SIGNIFICANTWORDS:
             continue
         counter=counter+1
-        if getwiki(word) is True:
-            bot.send_message(chat_id=update.message.chat_id, text='*'+word+'*'+'   Есть ответ  -> '+ SREF+word)
+        nword = getbase(word)
+        if getwiki(nword) is True:
+            bot.send_message(chat_id=update.message.chat_id, text='*'+word+'*'+'   Есть ответ  -> '+ SREF+nword)
 
 def main():
-    updater = Updater('887056733:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
+    updater = Updater('887056733:AAEzUIkPRRDTnl6IRnjZrouKTJzN1YzhquI')
     dispatcher = updater.dispatcher
     handle_message = MessageHandler(Filters.text, hMessage)
     dispatcher.add_handler(handle_message)
