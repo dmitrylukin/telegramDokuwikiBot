@@ -85,7 +85,7 @@ def hMessage(bot, update):
             bot.send_message(chat_id=update.message.chat_id, text='*'+word+'*'+'   Есть ответ  -> '+ SREF+nword)
 
 def main():
-    updater = Updater('887056733:AAEzUIkPRRDTnl6IRnjZrouKTJzN1YzhquI')
+    updater = Updater('887056733:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxI')
     dispatcher = updater.dispatcher
     handle_message = MessageHandler(Filters.text, hMessage)
     dispatcher.add_handler(handle_message)
