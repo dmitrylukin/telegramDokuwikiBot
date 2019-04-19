@@ -19,7 +19,7 @@ SIGNIFICANTWORDS = 4
 
 SREF='https://sampowiki.club/doku.php?do=search&id=start&sf=1&q='
 
-STOPLIST = [u'сампо', u'какого', u'соседи', u"привет", u"знает", u"подскажите", u"здравствуйте", u"делают", u"делает", u"какие", u"есть", u"здесь", u'какой', u'куда', u'какому', u'сейчас']
+STOPLIST = [u'сампо', u'какой', u'сосед', u"привет", u"знать", u"подсказать", u"здравствовать", u"делать", u"я", u"он", u"есть", u"здесь", u'она', u'куда', u'ехать', u'сейчас']
 
 def xmlmethod(mtype, mstring):
     if (mtype == 'search'): 
@@ -75,17 +75,17 @@ def hMessage(bot, update):
     for word in words:
         if len(word)/2 < 4:
             continue
-	if isStopWord(word):
+        nword = getbase(word)
+	if isStopWord(nword):
             continue
         if counter > SIGNIFICANTWORDS:
             continue
         counter=counter+1
-        nword = getbase(word)
         if getwiki(nword) is True:
             bot.send_message(chat_id=update.message.chat_id, text='*'+word+'*'+'   Есть ответ  -> '+ SREF+nword)
 
 def main():
-    updater = Updater('887056733:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxI')
+    updater = Updater('887056733:xxxxxxxxxxxxxxxxxxxxxxxx')
     dispatcher = updater.dispatcher
     handle_message = MessageHandler(Filters.text, hMessage)
     dispatcher.add_handler(handle_message)
